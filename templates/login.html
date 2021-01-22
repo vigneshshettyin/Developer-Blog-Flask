@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Login : {{ jsondata["favTitle"]}}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="{{ jsondata["favDescription"] }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" action="/login" method="post">
+    <a href="/"> <img  class="mb-4" src="https://vigneshshettyin.github.io/Portfolio-Site/img/favicon/android-chrome-512x512.png" alt="" width="72" height="72"></a>
+      <h1 class="h3 mb-3 font-weight-normal">SIGN IN </h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label><br>
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit"><img src="https://img.icons8.com/windows/32/000000/sign-in-form-password.png"/> SIGN IN</button><br>
+    <p class="mt-5 mb-3 text-muted">&copy; {{ jsondata["copyrightMessage"]}} 2020</p>
+    </form>
+  </body>
+</html>

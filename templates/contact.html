@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<section class="cta-section theme-bg-light py-5">
+		    <div class="container text-center">
+			    <h2 class="heading">Contact Me</h2>
+			    <div class="intro">Welcome to my blog. Subscribe and get my latest blog post in your inbox.</div>
+		    </div><!--//container-->
+	    </section>
+
+<section class="blog-list px-3 py-5 p-md-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+		    <div class="container">
+                <div class="item mb-5">
+                    <form name="sentMessage" id="contactForm" action="/contact" method="post" >
+                <div class="form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" data-rule="email" data-msg="Please enter a valid email" required />
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="phone" class="form-control" name="phone" id="phone" placeholder="Phone" data-rule="minlen:4" data-msg="Please enter your contact number" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us..." placeholder="Please write something for us..." required></textarea>
+                  <div class="validate"></div>
+                </div>
+                <div class="text-center"><button class="btn btn-primary" type="submit" title="Send Message">Send Message</button></div>
+              </form>
+                </div>
+            </div>
+</section>
+{% endblock %}

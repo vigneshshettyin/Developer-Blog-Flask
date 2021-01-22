@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block body %}
+
+	    <article class="blog-post px-3 py-5 p-md-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+        <form name="blogPost" id="blogPost" action="/edit/{{id}}" method="post" >
+            <div class="form-group">
+                  <input type="text" name="title" class="form-control" id="name" placeholder="Title" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.title}}" required/>
+                  <div class="validate"></div>
+                </div>
+            <div class="form-group">
+                  <input type="text" name="subtitle" class="form-control" id="name" placeholder="Sub Title" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.subtitle}}" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="text" name="author" class="form-control" id="name" placeholder="Author" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.author}}" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="slug" id="email" placeholder="Slug" data-rule="email" data-msg="Please enter a valid email" value="{{post.slug}}" required />
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="frontimg" id="email" placeholder="Front Display Image" data-rule="email" data-msg="Please enter a valid email" value="{{post.frontimg}}" required />
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="timeread" id="phone" placeholder="Time Read" data-rule="minlen:4" data-msg="Please enter your contact number" value="{{post.timeread}}" required/>
+                  <div class="validate"></div>
+                </div>
+                 <div class="form-group">
+                  <textarea id="summernote" name="editordata" required>{{post.content}}</textarea>
+              </div>
+                <div class="text-center"><button class="btn btn-primary" type="submit" title="Send Message">SUBMIT</button></div>
+              </form>
+            <br>
+        <center><a href="/login"><button type="button" class="btn btn-primary">BACK</button></a></center>
+	    </article>
+    {% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="cta-section py-3" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif">
+<nav class="navbar navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">BLOG DASHBOARD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item ">
+        <a class="nav-link " href="/login">POST / EDIT BLOG</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="/contactresp">CONTACT FORM RESPONSES</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/newsletterresp">NEWSLETTER RESPONSES</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/adminlogindetails">LAST LOGIN</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/logout">LOGOUT</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</section>
+    <section class="blog-list px-3 py-5 p-md-5" style="overflow:scroll;">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+    <table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Email</th>
+      <th scope="col">IP</th>
+      <th scope="col">Country</th>
+      <th scope="col">City</th>
+        <th scope="col">Date</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for response in response %}
+    <tr>
+      <th>{{ response.id }}</th>
+      <td>{{ response.email }}</td>
+      <td>{{ response.ip }}</td>
+      <td>{{ response.country }}</td>
+        <td>{{ response.city}}</td>
+        <td>{{ response.date}}</td>
+        <td><a href="/deleteNewsletter/{{response.id}}"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+    </section>
+
+{% endblock %}

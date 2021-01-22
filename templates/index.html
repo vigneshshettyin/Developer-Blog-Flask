@@ -1,0 +1,59 @@
+{#{% set frontimgname = 'images/upload/' + post.frontimg %}#}
+{% extends "base.html" %}
+{% block body %}
+
+    	    <section class="cta-section theme-bg-light py-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+		    <div class="container text-center">
+			    <h2 class="heading">Stay tuned!</h2>
+			    <div class="intro">Sign up here to get the latest news, updates and special offers delivered to your inbox.</div>
+			    <form class="signup-form form-inline justify-content-center pt-3" action="/newsletter" method="post">
+                    <div class="form-group">
+                        <label class="sr-only" for="semail">Your email</label>
+                        <input type="email" id="semail" name="email" class="form-control mr-md-1 semail" placeholder="Enter email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+		    </div><!--//container-->
+	    </section>
+
+	    <section class="blog-list px-3 py-5 p-md-5">
+		    <div class="container">
+
+{#                Start Loop#}
+                 {% for post in post %}
+                     {% set imgFront = 'images/upload/' + post.frontimg %}
+
+			    <div class="item mb-5">
+				    <div class="media">
+					    <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{ url_for('static', filename=imgFront) }}" alt="image">
+					    <div class="media-body">
+						    <h3 class="title mb-1"><a href="/post/{{ post.slug }}">{{ post.title }}</a></h3>
+						    <div class="meta mb-1"><span class="date">Published on {{ post.date }}</span><span class="time">{{ post.timeread }} min read</span><span class="comment"><a href="#">{{ post.author}}</a></span></div>
+						    <div class="intro">{{ post.subtitle }}...</div>
+						    <a class="more-link" href="/post/{{ post.slug }}">Read more &rarr;</a>
+					    </div><!--//media-body-->
+				    </div><!--//media-->
+			    </div><!--//item-->
+
+                {% endfor %}
+{#                End Loop#}
+
+
+			    <nav class="blog-nav nav nav-justified my-5">
+				  <a class="nav-link-prev nav-item nav-link rounded-left" href="#">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+				  <a class="nav-link-next nav-item nav-link rounded-right" href="#">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+				</nav>
+
+		    </div>
+	    </section>
+{% endblock %}
+

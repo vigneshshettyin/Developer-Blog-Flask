@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block body %}
+    <section class="cta-section py-3" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif">
+<nav class="navbar navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">BLOG DASHBOARD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item ">
+        <a class="nav-link " href="/login">POST / EDIT BLOG</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="/contactresp">CONTACT FORM RESPONSES</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/newsletterresp">NEWSLETTER RESPONSES</a>
+      </li>
+        <li class="nav-item active">
+        <a class="nav-link" href="/adminlogindetails">LAST LOGIN</a>
+      </li>
+        <li class="nav-item ">
+        <a class="nav-link" href="/logout">LOGOUT</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</section>
+  <section class="blog-list px-3 py-5 p-md-5" style="overflow:scroll;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+    <table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+        <th scope="col">Last Login</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for response in response %}
+    <tr>
+      <th>{{ response.id }}</th>
+      <td>{{ response.name }}</td>
+      <td>{{ response.email }}</td>
+      <td>{{ response.phone }}</td>
+        <td>{{ response.lastlogin}}</td>
+        <td><a href="/deleteAdminUser/{{response.id}}"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+    </section>
+<section class="blog-list px-3 py-5 p-md-5">
+		    <div class="container">
+                <div class="item mb-5">
+                    <form name="sentMessage" id="contactForm" action="/adminlogindetails" method="post" >
+                <div class="form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" data-rule="email" data-msg="Please enter a valid email" required />
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password" id="Password" placeholder="Password" data-rule="minlen:5" data-msg="Please enter your contact number" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="form-group">
+                  <input type="phone" class="form-control" name="phone" id="phone" placeholder="Phone" data-rule="minlen:4" data-msg="Please enter your contact number" required/>
+                  <div class="validate"></div>
+                </div>
+                <div class="text-center"><button class="btn btn-primary" type="submit" title="Send Message">ADD ADMIN</button></div>
+              </form>
+                </div>
+            </div>
+</section>
+{% endblock %}

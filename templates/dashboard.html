@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="cta-section py-3" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif">
+<nav class="navbar navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">BLOG DASHBOARD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+        <a class="nav-link " href="#">POST / EDIT BLOG</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="/contactresp">CONTACT FORM RESPONSES</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/newsletterresp">NEWSLETTER RESPONSES</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/adminlogindetails">LAST LOGIN</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/logout">LOGOUT</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</section>
+    <section class="blog-list px-3 py-5 p-md-5" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif; padding: 10px">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert">
+          <h5 class="alert-heading">{{ message}}</h5>
+        </div>
+          {% endfor %}
+           {% endif %}
+          {% endwith %}
+
+    <a href="/edit/0" style="float: left; padding-top: 10px; padding-bottom: 10px"><button type="submit" class="btn btn-primary">Add Blog Post</button></a>
+            <form style="float: right; padding-top: 10px; padding-bottom: 10px" action="/uploader" method="post" enctype="multipart/form-data">
+<input type="file" name="file1" style="padding-bottom: 10px">
+<button type="submit" class="btn btn-primary">Upload Image</button>
+            </form>
+    </section>
+    <br>
+    <section class="blog-list px-3 py-5 p-md-5" style="overflow: scroll">
+    <table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Tile</th>
+      <th scope="col">Slug</th>
+      <th scope="col">Author</th>
+        <th scope="col">Date</th>
+      <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for response in response %}
+    <tr>
+      <th>{{ response.id }}</th>
+      <td>{{ response.title }}</td>
+      <td>{{ response.slug }}</td>
+      <td>{{ response.author }}</td>
+        <td>{{ response.date}}</td>
+        <td><a href="/edit/{{response.id}}"><button type="button" class="btn btn-success"><i class="far fa-edit"></i></button></a></td>
+        <td><a href="/deletePost/{{response.id}}"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+    </section>
+
+
+{% endblock %}
