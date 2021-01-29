@@ -47,7 +47,7 @@ class Adminlogin(db.Model):
 
 class Blogposts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('Adminlogin.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('adminlogin.id'))
     slug = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(80), nullable=False)
     timeread = db.Column(db.String(20), nullable=False)
@@ -231,13 +231,19 @@ def loginPage():
     if (request.method == 'POST'):
         email = request.form.get('email')
         password = request.form.get('password')
+        remember = request.form.get('remember')
         response = Adminlogin.query.filter_by(email=email).first()
         if((response != None) and ( response.email == email ) and ( sha256_crypt.verify(password, response.password )==1)):
             updateloginTime = Adminlogin.query.filter_by(email=email).first()
             updateloginTime.lastlogin = time
             db.session.commit()
             # TODO:Invoke new session
-            session['logged_in'] = True
+            # log the user in using login_user
+            login_user(response, remember=remember)
+            # go to the page that the user tried to access if exists
+            # otherwise go to the dash page
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('dashboard'))
             # TODO: Pull all posts from db and return it
             response = Blogposts.query.filter_by().all()
             return render_template('dashboard.html', jsondata=jsondata, response=response)
@@ -246,7 +252,7 @@ def loginPage():
             # if (response == None or (sha256_crypt.verify(password, response.password) != 1)):
             flash("Invalid Credentials!", "danger")
             return render_template('login.html', jsondata=jsondata)
-
+    return render_template('login.html', jsondata=jsondata)
 # TODO: File uploader
 
 @app.route('/dashboard', methods = ['GET', 'POST'])

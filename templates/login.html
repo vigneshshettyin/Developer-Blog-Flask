@@ -18,7 +18,7 @@
   <body class="text-center">
     <form class="form-signin" action="/login" method="post">
     <a href="/"> <img  class="mb-4" src="{{ url_for('static', filename='images/favicon.ico') }}" alt="" width="72" height="72"></a>
-      <h1 class="h3 mb-3 font-weight-normal">SIGN IN </h1>
+      <h1 class="h3 mb-3 font-weight-normal">LOGIN</h1>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -39,7 +39,7 @@
           <input name="remember" type="checkbox" value="remember-me"> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit"><img src="https://img.icons8.com/windows/32/000000/sign-in-form-password.png"/> SIGN IN</button><br>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">LOGIN</button><br>
     <p class="mt-5 mb-3 text-muted">&copy; {{ jsondata["copyrightMessage"]}} 2020</p>
     </form>
   </body>
