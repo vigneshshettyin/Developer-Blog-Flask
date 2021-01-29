@@ -36,7 +36,7 @@ class Contact(db.Model):
     message = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
-class Adminlogin(db.Model):
+class Adminlogin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
@@ -114,6 +114,18 @@ def newsletter():
         flash("Newsletter Subscribed Successfully!", "success")
     return redirect('/')
 
+@app.route('/test', methods = ['GET', 'POST'])
+def test():
+    name = "Vignesh"
+    email = "vigneshshetty.in@gmail.com"
+    phone = "6362490109"
+    password ="admin"
+    password = sha256_crypt.hash(password)
+    entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
+    db.session.add(entry)
+    db.session.commit()
+    return redirect(url_for('loginPage'))
+
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
 @login_required
 def AdminLoginDetails():
@@ -121,7 +133,7 @@ def AdminLoginDetails():
             name = request.form.get('name')
             email = request.form.get('email')
             phone = request.form.get('phone')
-            password =sha256_crypt.encrypt(request.form.get('password'))
+            password =sha256_crypt.hash(request.form.get('password'))
             entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
             db.session.add(entry)
             db.session.commit()
