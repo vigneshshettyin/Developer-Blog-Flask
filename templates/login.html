@@ -17,7 +17,7 @@
 
   <body class="text-center">
     <form class="form-signin" action="/login" method="post">
-    <a href="/"> <img  class="mb-4" src="https://vigneshshettyin.github.io/Portfolio-Site/img/favicon/android-chrome-512x512.png" alt="" width="72" height="72"></a>
+    <a href="/"> <img  class="mb-4" src="{{ url_for('static', filename='images/favicon.ico') }}" alt="" width="72" height="72"></a>
       <h1 class="h3 mb-3 font-weight-normal">SIGN IN </h1>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -36,7 +36,7 @@
       <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <input name="remember" type="checkbox" value="remember-me"> Remember me
         </label>
       </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit"><img src="https://img.icons8.com/windows/32/000000/sign-in-form-password.png"/> SIGN IN</button><br>
