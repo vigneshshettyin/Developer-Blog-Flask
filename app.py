@@ -12,11 +12,10 @@ with open('config.json', 'r') as c:
 
 app = Flask(__name__)
 
-app.secret_key = 'f9bf78b9a18ce6d46a0cd2b0b86df9da'
+app.secret_key = '&^98779843798qbnkj(*&*&(23-VIGNESH-BLOG-SITE-&^*&^*&^hjbv3773h'
 app.config['UPLOAD_FOLDER'] = jsondata['upload_location']
 app.config['SQLALCHEMY_DATABASE_URI'] = jsondata['databaseUri']
 db = SQLAlchemy(app)
-
 
 
 class Contact(db.Model):
@@ -27,8 +26,18 @@ class Contact(db.Model):
     message = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
+class Adminlogin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    lastlogin = db.Column(db.String(12), nullable=True)
+    blogpost = db.relationship('Blogposts', cascade="all,delete", backref='blogpost')
+
 class Blogposts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('Adminlogin.id'))
     slug = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(80), nullable=False)
     timeread = db.Column(db.String(20), nullable=False)
@@ -46,17 +55,6 @@ class Newsletter(db.Model):
     city = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(12), nullable=True)
-
-
-
-class Adminlogin(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    lastlogin = db.Column(db.String(12), nullable=True)
-
 
 
 @app.route('/')
@@ -91,10 +89,9 @@ def contact():
 def newsletter():
     if (request.method == 'POST'):
         email = request.form.get('email')
-        # ip_address = "8.8.8.8";
         # TODO: Comment above line when website is live on web
-        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-        # ip_address = "XX.XXX.XXX.XX"
+        # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+        ip_address = "43.247.157.20";
         url = requests.get("http://ip-api.com/json/{}".format(ip_address))
         j = url.json()
         city = j["city"]
