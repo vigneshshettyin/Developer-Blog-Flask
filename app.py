@@ -222,6 +222,7 @@ def edit(id):
                 db.session.add(post)
                 db.session.commit()
                 flash("Post added Successfully!", "success")
+                return redirect(url_for('dashboard'))
             else:
                 post = Blogposts.query.filter_by(id=id).first()
                 post.title = blog_title
@@ -234,7 +235,8 @@ def edit(id):
                 post.date = date
                 db.session.commit()
                 flash("Post edited Successfully!", "success")
-                return redirect('/edit/'+id)
+                # return redirect('/edit/'+id)
+                return redirect(url_for('dashboard'))
         post = Blogposts.query.filter_by(id=id).first()
         return render_template('edit.html', jsondata=jsondata, post=post, id=id)
 
