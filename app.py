@@ -129,8 +129,13 @@ def newsletter():
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
 @login_required
 def AdminLoginDetails():
+    if (current_user.email == jsondata["adminemail"]):
         response = Adminlogin.query.order_by(Adminlogin.id).all()
         return render_template('adminlogindetails.html', response=response, jsondata=jsondata)
+    else:
+        flash("No vaild permissions!", "danger")
+        return redirect(url_for('dashboard'))
+
 
 @app.route('/register', methods = ['GET', 'POST'])
 def RegisterPage():
@@ -151,14 +156,18 @@ def deleteAdminUser(id):
         deleteAdminUser = Adminlogin.query.filter_by(id=id).first()
         db.session.delete(deleteAdminUser)
         db.session.commit()
-        flash("Admin User Deleted Successfully!", "success")
+        flash("User deleted successfully!", "success")
         return redirect('/adminlogindetails')
 
 @app.route('/contactresp', methods = ['GET', 'POST'])
 @login_required
 def contactResp():
+    if (current_user.email == jsondata["adminemail"]):
         response = Contact.query.order_by(Contact.id).all()
         return render_template('contactresp.html', response=response, jsondata=jsondata)
+    else:
+        flash("No vaild permissions!", "danger")
+        return redirect(url_for('dashboard'))
 
 
 
@@ -168,7 +177,7 @@ def deleteContact(id):
         contactResp = Contact.query.filter_by(id=id).first()
         db.session.delete(contactResp)
         db.session.commit()
-        flash("Response Deleted Successfully!", "success")
+        flash("Response deleted successfully!", "success")
         return redirect('/contactresp')
 
 
@@ -176,8 +185,12 @@ def deleteContact(id):
 @app.route('/newsletterresp', methods = ['GET', 'POST'])
 @login_required
 def newsletterResp():
-        response = Newsletter.query.order_by(Newsletter.id).all()
-        return render_template('newsletterresp.html', response=response, jsondata=jsondata)
+        if(current_user.email==jsondata["adminemail"]):
+            response = Newsletter.query.order_by(Newsletter.id).all()
+            return render_template('newsletterresp.html', response=response, jsondata=jsondata)
+        else:
+            flash("No vaild permissions!", "danger")
+            return redirect(url_for('dashboard'))
 
 
 
@@ -187,7 +200,7 @@ def deleteNewsletter(id):
         deleteNewsletter = Newsletter.query.filter_by(id=id).first()
         db.session.delete(deleteNewsletter)
         db.session.commit()
-        flash("Response Deleted Successfully!", "success")
+        flash("Response deleted successfully!", "success")
         return redirect('/newsletterresp')
 
 
@@ -202,7 +215,7 @@ def deletePost(id):
         deletePost = Blogposts.query.filter_by(id=id).first()
         db.session.delete(deletePost)
         db.session.commit()
-        flash("Post Deleted Successfully!", "success")
+        flash("Post deleted successfully!", "success")
         return redirect('/login')
 
 @app.route("/edit/<string:id>", methods = ['GET', 'POST'])
@@ -221,7 +234,7 @@ def edit(id):
                 post = Blogposts(title=blog_title,user_id=current_user.id, subtitle=subtitle, frontimg=frontimg ,slug=blog_slug, content=content, author=author, timeread=timeread, date=date)
                 db.session.add(post)
                 db.session.commit()
-                flash("Post added Successfully!", "success")
+                flash("Post added successfully!", "success")
                 return redirect(url_for('dashboard'))
             else:
                 post = Blogposts.query.filter_by(id=id).first()
@@ -268,7 +281,7 @@ def loginPage():
         # TODO:Add a invalid login credentials message using flash
         else:
             # if (response == None or (sha256_crypt.verify(password, response.password) != 1)):
-            flash("Invalid Credentials!", "danger")
+            flash("Invalid credentials!", "danger")
             return render_template('login.html', jsondata=jsondata)
     return render_template('login.html', jsondata=jsondata)
 # TODO: File uploader
@@ -276,8 +289,12 @@ def loginPage():
 @app.route('/dashboard', methods = ['GET', 'POST'])
 @login_required
 def dashboard():
-    response = Blogposts.query.filter_by(user_id = current_user.id).all()
-    return render_template('dashboard.html', jsondata=jsondata, response=response)
+    if (current_user.email == jsondata["adminemail"]):
+        response = Blogposts.query.order_by(Blogposts.id).all()
+        return render_template('dashboard.html', jsondata=jsondata, response=response)
+    else:
+        response = Blogposts.query.filter_by(user_id = current_user.id).all()
+        return render_template('dashboard.html', jsondata=jsondata, response=response)
 
 @app.route("/uploader", methods = ['GET', 'POST'])
 @login_required
@@ -286,7 +303,7 @@ def uploader():
             f= request.files['file1']
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename) ))
             post = Blogposts.query.all()
-            flash("File Uploaded Successfully!", "success")
+            flash("File uploaded successfully!", "success")
             return redirect(url_for('dashboard'))
 
 # TODO: Destroy session ( Logout Function)
@@ -296,7 +313,7 @@ def uploader():
 def logout():
     #log the user out using logout_user, flash a msg and go to the login page
     logout_user()
-    flash('Logged Out Successfully!', 'success')
+    flash('Logged out successfully!', 'success')
     return redirect(url_for('loginPage'))
 
 if __name__ == '__main__':
