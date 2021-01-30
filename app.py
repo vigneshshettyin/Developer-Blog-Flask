@@ -114,32 +114,36 @@ def newsletter():
         flash("Newsletter Subscribed Successfully!", "success")
     return redirect('/')
 
-@app.route('/test', methods = ['GET', 'POST'])
-def test():
-    name = "Vignesh"
-    email = "vigneshshetty.in@gmail.com"
-    phone = "6362490109"
-    password ="admin"
-    password = sha256_crypt.hash(password)
-    entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
-    db.session.add(entry)
-    db.session.commit()
-    return redirect(url_for('loginPage'))
+# @app.route('/test', methods = ['GET', 'POST'])
+# def test():
+#     name = "Vignesh"
+#     email = "vigneshshetty.in@gmail.com"
+#     phone = "6362490109"
+#     password ="admin"
+#     password = sha256_crypt.hash(password)
+#     entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
+#     db.session.add(entry)
+#     db.session.commit()
+#     return redirect(url_for('loginPage'))
 
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
 @login_required
 def AdminLoginDetails():
-        if (request.method == 'POST'):
-            name = request.form.get('name')
-            email = request.form.get('email')
-            phone = request.form.get('phone')
-            password =sha256_crypt.hash(request.form.get('password'))
-            entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
-            db.session.add(entry)
-            db.session.commit()
-            flash("Admin User Added Successfully!", "success")
         response = Adminlogin.query.order_by(Adminlogin.id).all()
         return render_template('adminlogindetails.html', response=response, jsondata=jsondata)
+
+@app.route('/register', methods = ['GET', 'POST'])
+def RegisterPage():
+    if (request.method == 'POST'):
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        password = sha256_crypt.hash(request.form.get('password'))
+        entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
+        db.session.add(entry)
+        db.session.commit()
+        flash("User Added Successfully, Now Login", "success")
+    return render_template('register.html',jsondata=jsondata)
 
 @app.route("/deleteAdminUser/<string:id>", methods = ['GET', 'POST'])
 @login_required
