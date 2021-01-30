@@ -20,7 +20,7 @@ If you created something awesome and want to contribute then feel free to open P
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://vignesh-blog.herokuapp.com/)
 
-Email: admin@gmail.com
+Email: vigneshshetty.in@gmail.com
 
 Password: admin
 
