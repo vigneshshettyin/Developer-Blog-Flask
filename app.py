@@ -218,7 +218,7 @@ def edit(id):
             timeread = request.form.get('timeread')
             date = time
             if id=='0':
-                post = Blogposts(title=blog_title,subtitle=subtitle, frontimg=frontimg ,slug=blog_slug, content=content, author=author, timeread=timeread, date=date)
+                post = Blogposts(title=blog_title,user_id=current_user.id, subtitle=subtitle, frontimg=frontimg ,slug=blog_slug, content=content, author=author, timeread=timeread, date=date)
                 db.session.add(post)
                 db.session.commit()
                 flash("Post added Successfully!", "success")
@@ -276,7 +276,7 @@ def loginPage():
 @app.route('/dashboard', methods = ['GET', 'POST'])
 @login_required
 def dashboard():
-    response = Blogposts.query.filter_by().all()
+    response = Blogposts.query.filter_by(user_id = current_user.id).all()
     return render_template('dashboard.html', jsondata=jsondata, response=response)
 
 @app.route("/uploader", methods = ['GET', 'POST'])
@@ -287,7 +287,7 @@ def uploader():
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename) ))
             post = Blogposts.query.all()
             flash("File Uploaded Successfully!", "success")
-            return render_template('dashboard.html',jsondata=jsondata,post=post)
+            return redirect(url_for('dashboard'))
 
 # TODO: Destroy session ( Logout Function)
 
