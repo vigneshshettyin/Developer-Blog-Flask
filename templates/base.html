@@ -22,6 +22,8 @@
     <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='css/theme-1.css') }}">
     <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=5fb4b6aa5447720012bb52b5&product=inline-share-buttons" async="async"></script>
 
+  <link href="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -113,12 +115,19 @@
 
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+    <!-- Page level plugins -->
+    <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
+
+
     <script>
     $(document).ready(function() {
         $('#summernote').summernote();
     });
   </script>
-
 
 
 </body>
