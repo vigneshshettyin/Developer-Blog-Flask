@@ -154,9 +154,12 @@ def RegisterPage():
 @login_required
 def deleteAdminUser(id):
         deleteAdminUser = Adminlogin.query.filter_by(id=id).first()
-        db.session.delete(deleteAdminUser)
-        db.session.commit()
-        flash("User deleted successfully!", "success")
+        if(deleteAdminUser.email==jsondata["adminemail"]):
+            flash("Administrator account can't be deleted!", "danger")
+        else:
+            db.session.delete(deleteAdminUser)
+            db.session.commit()
+            flash("User deleted successfully!", "success")
         return redirect('/adminlogindetails')
 
 @app.route('/contactresp', methods = ['GET', 'POST'])
