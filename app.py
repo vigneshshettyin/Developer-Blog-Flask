@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request, redirect, session, flash, url_for
+from flask import Flask, render_template,request, redirect, flash, url_for
 # TODO: Flash message config & Session setup
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
