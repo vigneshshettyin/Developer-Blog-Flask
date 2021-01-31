@@ -304,7 +304,6 @@ def uploader():
         if (request.method == 'POST'):
             f= request.files['file1']
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename) ))
-            post = Blogposts.query.all()
             flash("File uploaded successfully!", "success")
             return redirect(url_for('dashboard'))
 
