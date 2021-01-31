@@ -1,5 +1,4 @@
 from flask import Flask, render_template,request, redirect, flash, url_for
-# TODO: Flash message config & Session setup
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -10,7 +9,6 @@ import json, requests, os, pytz
 with open('config.json', 'r') as c:
     jsondata = json.load(c)["jsondata"]
 
-
 app = Flask(__name__)
 
 app.secret_key = '&^98779843798qbnkj(*&*&(23-VIGNESH-BLOG-SITE-&^*&^*&^hjbv3773h'
@@ -18,12 +16,10 @@ app.config['UPLOAD_FOLDER'] = jsondata['upload_location']
 app.config['SQLALCHEMY_DATABASE_URI'] = jsondata['databaseUri']
 db = SQLAlchemy(app)
 
-#use LoginManager to provide login functionality and do some initial confg
 login_manager = LoginManager(app)
 login_manager.login_view = 'loginPage'
-login_manager.login_message_category = 'info'
+login_manager.login_message_category = 'warning'
 
-#function to load the currently active user
 @login_manager.user_loader
 def load_user(user_id):
     return Adminlogin.query.get(user_id)
@@ -57,7 +53,6 @@ class Blogposts(db.Model):
     frontimg = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
-
 class Newsletter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ip = db.Column(db.String(80), nullable=False)
@@ -65,7 +60,6 @@ class Newsletter(db.Model):
     city = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(12), nullable=True)
-
 
 IST = pytz.timezone('Asia/Kolkata')
 x = datetime.now(IST)
@@ -76,13 +70,9 @@ def homePage():
     post = Blogposts.query.filter_by().all()
     return render_template('index.html', jsondata=jsondata, post=post)
 
-
-
 @app.route('/about')
 def about():
     return render_template('about.html', jsondata=jsondata)
-
-
 
 @app.route('/contact', methods = ['GET', 'POST'])
 def contact():
@@ -97,13 +87,10 @@ def contact():
         flash("Thank you for contacting us – we will get back to you soon!", "success")
     return render_template('contact.html', jsondata=jsondata)
 
-
-
 @app.route('/newsletter', methods = ['GET', 'POST'])
 def newsletter():
     if (request.method == 'POST'):
         email = request.form.get('email')
-        # TODO: Comment above line when website is live on web
         # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
         ip_address = "43.247.157.20";
         url = requests.get("http://ip-api.com/json/{}".format(ip_address))
@@ -116,18 +103,6 @@ def newsletter():
         flash("Newsletter Subscribed Successfully!", "success")
     return redirect('/')
 
-# @app.route('/test', methods = ['GET', 'POST'])
-# def test():
-#     name = "Vignesh"
-#     email = "vigneshshetty.in@gmail.com"
-#     phone = "6362490109"
-#     password ="admin"
-#     password = sha256_crypt.hash(password)
-#     entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
-#     db.session.add(entry)
-#     db.session.commit()
-#     return redirect(url_for('loginPage'))
-
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
 @login_required
 def AdminLoginDetails():
@@ -137,7 +112,6 @@ def AdminLoginDetails():
     else:
         flash("No vaild permissions!", "danger")
         return redirect(url_for('dashboard'))
-
 
 @app.route('/register', methods = ['GET', 'POST'])
 def RegisterPage():
@@ -174,8 +148,6 @@ def contactResp():
         flash("No vaild permissions!", "danger")
         return redirect(url_for('dashboard'))
 
-
-
 @app.route("/deleteContact/<string:id>", methods = ['GET', 'POST'])
 @login_required
 def deleteContact(id):
@@ -184,8 +156,6 @@ def deleteContact(id):
         db.session.commit()
         flash("Response deleted successfully!", "success")
         return redirect('/contactresp')
-
-
 
 @app.route('/newsletterresp', methods = ['GET', 'POST'])
 @login_required
@@ -197,8 +167,6 @@ def newsletterResp():
             flash("No vaild permissions!", "danger")
             return redirect(url_for('dashboard'))
 
-
-
 @app.route("/deleteNewsletter/<string:id>", methods = ['GET', 'POST'])
 @login_required
 def deleteNewsletter(id):
@@ -208,11 +176,13 @@ def deleteNewsletter(id):
         flash("Response deleted successfully!", "success")
         return redirect('/newsletterresp')
 
-
 @app.route("/post/<string:slug>", methods=['GET'])
 def postPage(slug):
     post = Blogposts.query.filter_by(slug=slug).first()
-    return render_template('post.html', jsondata=jsondata, post=post)
+    if(post==None):
+        return redirect(url_for('homePage'))
+    else:
+        return render_template('post.html', jsondata=jsondata, post=post)
 
 @app.route("/deletePost/<string:id>", methods = ['GET', 'POST'])
 @login_required
@@ -253,15 +223,12 @@ def edit(id):
                 post.date = date
                 db.session.commit()
                 flash("Post edited Successfully!", "success")
-                # return redirect('/edit/'+id)
                 return redirect(url_for('dashboard'))
         post = Blogposts.query.filter_by(id=id).first()
         return render_template('edit.html', jsondata=jsondata, post=post, id=id)
 
-
 @app.route('/login', methods = ['GET', 'POST'])
 def loginPage():
-    # TODO: Check for active session
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     if (request.method == 'POST'):
@@ -273,16 +240,11 @@ def loginPage():
             updateloginTime = Adminlogin.query.filter_by(email=email).first()
             updateloginTime.lastlogin = time
             db.session.commit()
-            # TODO:Invoke new session
-            # log the user in using login_user
             login_user(response, remember=remember)
-            # go to the page that the user tried to access if exists
-            # otherwise go to the dash page
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('dashboard'))
         # TODO:Add a invalid login credentials message using flash
         else:
-            # if (response == None or (sha256_crypt.verify(password, response.password) != 1)):
             flash("Invalid credentials!", "danger")
             return render_template('login.html', jsondata=jsondata)
     return render_template('login.html', jsondata=jsondata)
@@ -307,12 +269,9 @@ def uploader():
             flash("File uploaded successfully!", "success")
             return redirect(url_for('dashboard'))
 
-# TODO: Destroy session ( Logout Function)
-
 @app.route('/logout')
 @login_required
 def logout():
-    #log the user out using logout_user, flash a msg and go to the login page
     logout_user()
     flash('Logged out successfully!', 'success')
     return redirect(url_for('loginPage'))
