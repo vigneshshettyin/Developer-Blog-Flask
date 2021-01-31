@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from passlib.hash import sha256_crypt
 from datetime import datetime
-import json, requests, os
+import json, requests, os, pytz
 
 with open('config.json', 'r') as c:
     jsondata = json.load(c)["jsondata"]
@@ -66,7 +66,9 @@ class Newsletter(db.Model):
     email = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
-x = datetime.now()
+
+IST = pytz.timezone('Asia/Kolkata')
+x = datetime.now(IST)
 time = x.strftime("%c")
 
 @app.route('/')
@@ -278,9 +280,6 @@ def loginPage():
             # otherwise go to the dash page
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('dashboard'))
-            # TODO: Pull all posts from db and return it
-            response = Blogposts.query.filter_by().all()
-            return render_template('dashboard.html', jsondata=jsondata, response=response)
         # TODO:Add a invalid login credentials message using flash
         else:
             # if (response == None or (sha256_crypt.verify(password, response.password) != 1)):
