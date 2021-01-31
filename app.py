@@ -91,16 +91,20 @@ def contact():
 def newsletter():
     if (request.method == 'POST'):
         email = request.form.get('email')
-        # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-        ip_address = "43.247.157.20";
-        url = requests.get("http://ip-api.com/json/{}".format(ip_address))
-        j = url.json()
-        city = j["city"]
-        country =j["country"]
-        entry = Newsletter(city=city, country=country, ip=ip_address, date=time, email=email)
-        db.session.add(entry)
-        db.session.commit()
-        flash("Newsletter Subscribed Successfully!", "success")
+        response = Newsletter.query.filter_by(email=email).first()
+        if(response==None):
+            # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+            ip_address = "43.247.157.20";
+            url = requests.get("http://ip-api.com/json/{}".format(ip_address))
+            j = url.json()
+            city = j["city"]
+            country =j["country"]
+            entry = Newsletter(city=city, country=country, ip=ip_address, date=time, email=email)
+            db.session.add(entry)
+            db.session.commit()
+            flash("Newsletter subscribed successfully!", "success")
+        else:
+            flash("Newsletter already subscribed!", "danger")
     return redirect('/')
 
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
