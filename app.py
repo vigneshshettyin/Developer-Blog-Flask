@@ -128,6 +128,7 @@ def RegisterPage():
         db.session.add(entry)
         db.session.commit()
         flash("User Added Successfully, Now Login", "success")
+        return redirect(url_for('loginPage'))
     return render_template('register.html',jsondata=jsondata)
 
 @app.route("/deleteAdminUser/<string:id>", methods = ['GET', 'POST'])
