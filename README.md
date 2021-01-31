@@ -20,9 +20,9 @@ If you created something awesome and want to contribute then feel free to open P
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://vignesh-blog.herokuapp.com/)
 
-Email: vigneshshetty.in@gmail.com
+Email: demo@gmail.com
 
-Password: admin
+Password: demo
 
 Note: Database will reset in 10 mins
 
