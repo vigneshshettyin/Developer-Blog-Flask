@@ -44,8 +44,8 @@
 					    <div class="media-body">
 						    <h3 class="title mb-1"><a href="/post/{{ post.slug }}">{{ post.title }}</a></h3>
 						    <div class="meta mb-1"><span class="date">Published on {{ post.date }}</span><span class="time">{{ post.timeread }} min read</span><span class="comment"><a href="#">{{ post.author}}</a></span></div>
-						    <div class="intro"><input type='hidden' id='data' value='{{ post.content[0:150]}}'></input>
-<div id='display'><script> document.getElementById('display').innerHTML = document.getElementById('data').value  </script></div>...</div>
+						    <div class="intro"><input type='hidden' id='data' value='{{ post.content[0:150]}} .....'></input>
+<div id='display'><script> document.getElementById('display').innerHTML = document.getElementById('data').value</script></div></div>
 						    <a class="more-link" href="/post/{{ post.slug }}">Read more &rarr;</a>
 					    </div><!--//media-body-->
 				    </div><!--//media-->
