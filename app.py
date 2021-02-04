@@ -3,8 +3,9 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from passlib.hash import sha256_crypt
+from slugify import slugify
 from datetime import datetime
-import json, requests, os, pytz
+import json, requests, os, pytz, random, string
 
 with open('config.json', 'r') as c:
     jsondata = json.load(c)["jsondata"]
@@ -48,7 +49,6 @@ class Blogposts(db.Model):
     author = db.Column(db.String(80), nullable=False)
     timeread = db.Column(db.String(20), nullable=False)
     title = db.Column(db.String(50), nullable=False)
-    subtitle = db.Column(db.String(150), nullable=False)
     content = db.Column(db.String(500), nullable=False)
     frontimg = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(12), nullable=True)
@@ -203,15 +203,18 @@ def deletePost(id):
 def edit(id):
         if request.method == 'POST':
             blog_title = request.form.get('title')
-            subtitle = request.form.get('subtitle')
-            blog_slug = request.form.get('slug')
-            author = request.form.get('author')
+            blog_slug = slugify(blog_title)
+            check = Blogposts.query.filter_by(slug=blog_slug).first()
+            if(check==None):
+                pass
+            else:
+                blog_slug = blog_slug+
             frontimg = request.form.get('frontimg')
             content = request.form.get('editordata')
             timeread = request.form.get('timeread')
             date = time
             if id=='0':
-                post = Blogposts(title=blog_title,user_id=current_user.id, subtitle=subtitle, frontimg=frontimg ,slug=blog_slug, content=content, author=author, timeread=timeread, date=date)
+                post = Blogposts(title=blog_title,user_id=current_user.id, frontimg=frontimg ,slug=blog_slug, content=content, author=current_user.name, timeread=timeread, date=date)
                 db.session.add(post)
                 db.session.commit()
                 flash("Post added successfully!", "success")
@@ -219,12 +222,9 @@ def edit(id):
             else:
                 post = Blogposts.query.filter_by(id=id).first()
                 post.title = blog_title
-                post.subtitle= subtitle
-                post.slug = blog_slug
                 post.timeread = timeread
                 post.frontimg = frontimg
                 post.content = content
-                post.author = author
                 post.date = date
                 db.session.commit()
                 flash("Post edited Successfully!", "success")

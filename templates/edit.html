@@ -7,14 +7,6 @@
                   <input type="text" name="title" class="form-control" id="name" placeholder="Title" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.title}}" required/>
                   <div class="validate"></div>
                 </div>
-            <div class="form-group">
-                  <input type="text" name="subtitle" class="form-control" id="name" placeholder="Sub Title" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.subtitle}}" required/>
-                  <div class="validate"></div>
-                </div>
-                <div class="form-group">
-                  <input type="text" name="author" class="form-control" id="name" placeholder="Author" data-rule="minlen:4" data-msg="Please enter at least 4 chars" value="{{post.author}}" required/>
-                  <div class="validate"></div>
-                </div>
                 <div class="form-group">
                   <input type="text" class="form-control" name="slug" id="email" placeholder="Slug" data-rule="email" data-msg="Please enter a valid email" value="{{post.slug}}" required />
                   <div class="validate"></div>
@@ -23,8 +15,9 @@
                   <input type="text" class="form-control" name="frontimg" id="email" placeholder="Front Display Image" data-rule="email" data-msg="Please enter a valid email" value="{{post.frontimg}}" required />
                   <div class="validate"></div>
                 </div>
+
                 <div class="form-group">
-                  <input type="text" class="form-control" name="timeread" id="phone" placeholder="Time Read" data-rule="minlen:4" data-msg="Please enter your contact number" value="{{post.timeread}}" required/>
+                  <input type="number" class="form-control" name="timeread" id="phone" placeholder="Time Read" data-rule="minlen:4" data-msg="Please enter your contact number" value="{{post.timeread}}" required/>
                   <div class="validate"></div>
                 </div>
                  <div class="form-group">
