@@ -70,10 +70,6 @@ def homePage():
     post = Blogposts.query.filter_by().all()
     return render_template('index.html', jsondata=jsondata, post=post)
 
-@app.route('/about')
-def about():
-    return render_template('about.html', jsondata=jsondata)
-
 @app.route('/contact', methods = ['GET', 'POST'])
 def contact():
     if (request.method == 'POST'):
