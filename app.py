@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from passlib.hash import sha256_crypt
 from slugify import slugify
 from datetime import datetime
-import json, requests, os, pytz, random, string
+import json, requests, os, pytz
 
 with open('config.json', 'r') as c:
     jsondata = json.load(c)["jsondata"]
@@ -89,8 +89,7 @@ def newsletter():
         email = request.form.get('email')
         response = Newsletter.query.filter_by(email=email).first()
         if(response==None):
-            # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-            ip_address = "43.247.157.20";
+            ip_address = request.environ['HTTP_X_FORWARDED_FOR']
             url = requests.get("http://ip-api.com/json/{}".format(ip_address))
             j = url.json()
             city = j["city"]
@@ -241,12 +240,10 @@ def loginPage():
             login_user(response, remember=remember)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('dashboard'))
-        # TODO:Add a invalid login credentials message using flash
         else:
             flash("Invalid credentials!", "danger")
             return render_template('login.html', jsondata=jsondata)
     return render_template('login.html', jsondata=jsondata)
-# TODO: File uploader
 
 @app.route('/dashboard', methods = ['GET', 'POST'])
 @login_required
