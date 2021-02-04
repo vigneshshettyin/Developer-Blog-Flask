@@ -206,29 +206,26 @@ def edit(id):
             blog_slug = slugify(blog_title)
             check = Blogposts.query.filter_by(slug=blog_slug).first()
             if(check==None):
-                pass
-            else:
-                blog_slug = blog_slug+
-            frontimg = request.form.get('frontimg')
-            content = request.form.get('editordata')
-            timeread = request.form.get('timeread')
-            date = time
-            if id=='0':
-                post = Blogposts(title=blog_title,user_id=current_user.id, frontimg=frontimg ,slug=blog_slug, content=content, author=current_user.name, timeread=timeread, date=date)
-                db.session.add(post)
-                db.session.commit()
-                flash("Post added successfully!", "success")
-                return redirect(url_for('dashboard'))
-            else:
-                post = Blogposts.query.filter_by(id=id).first()
-                post.title = blog_title
-                post.timeread = timeread
-                post.frontimg = frontimg
-                post.content = content
-                post.date = date
-                db.session.commit()
-                flash("Post edited Successfully!", "success")
-                return redirect(url_for('dashboard'))
+                frontimg = request.form.get('frontimg')
+                content = request.form.get('editordata')
+                timeread = request.form.get('timeread')
+                date = time
+                if id=='0':
+                    post = Blogposts(title=blog_title,user_id=current_user.id, frontimg=frontimg ,slug=blog_slug, content=content, author=current_user.name, timeread=timeread, date=date)
+                    db.session.add(post)
+                    db.session.commit()
+                    flash("Post added successfully!", "success")
+                    return redirect(url_for('dashboard'))
+                else:
+                    post = Blogposts.query.filter_by(id=id).first()
+                    post.title = blog_title
+                    post.timeread = timeread
+                    post.frontimg = frontimg
+                    post.content = content
+                    post.date = date
+                    db.session.commit()
+                    flash("Post edited Successfully!", "success")
+                    return redirect(url_for('dashboard'))
         post = Blogposts.query.filter_by(id=id).first()
         return render_template('edit.html', jsondata=jsondata, post=post, id=id)
 
