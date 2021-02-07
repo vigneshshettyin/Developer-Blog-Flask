@@ -5,7 +5,7 @@
   "copyrightMessage": "VIGNESH SHETTY",
   "devImgName": "vignesh.jpg",
   "adminemail": "vigneshshetty.in@gmail.com",
-  "databaseUri": "postgres://alnaptumjrkblj:339349e76d1d6af25cda67f063b7cbc712d0391c11c1d0d6df203c8af43c5719@ec2-34-254-69-72.eu-west-1.compute.amazonaws.com:5432/ddo4cs5vh75sn3",
+  "databaseUri": "sqlite:///blog.db",
   "upload_location": "static/images/upload"
 }
 }
