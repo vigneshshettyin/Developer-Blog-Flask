@@ -39,7 +39,7 @@ class Adminlogin(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(50), nullable=False)
-    lastlogin = db.Column(db.String(12), nullable=True)
+    lastlogin = db.Column(db.String(50), nullable=True)
     blogpost = db.relationship('Blogposts', cascade="all,delete", backref='blogpost')
 
 class Blogposts(db.Model):
