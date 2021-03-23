@@ -4,7 +4,8 @@
   "favDescription": "This is my blog website. I am basically Web developer, Data Science Enthusiast, and everything in between. Any queries drop a mail to contact@vigneshshetty.in .",
   "copyrightMessage": "VIGNESH SHETTY",
   "devImgName": "vignesh.jpg",
-  "adminemail": "vigneshshetty.in@gmail.com",
+  "GOOGLE_CLIENT_ID":"#######",
+  "GOOGLE_CLIENT_SECRET":"#####",
   "databaseUri": "sqlite:///blog.db",
   "upload_location": "static/images/upload"
 }

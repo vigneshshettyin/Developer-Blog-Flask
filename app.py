@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, session
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
+from authlib.integrations.flask_client import OAuth
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from passlib.hash import sha256_crypt
@@ -19,6 +20,24 @@ app.secret_key = '&^98779843798qbnkj(*&*&(23-VIGNESH-BLOG-SITE-&^*&^*&^hjbv3773h
 app.config['UPLOAD_FOLDER'] = jsondata['upload_location']
 app.config['SQLALCHEMY_DATABASE_URI'] = jsondata['databaseUri']
 db = SQLAlchemy(app)
+
+
+# oAuth Setup
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=jsondata["GOOGLE_CLIENT_ID"],
+    client_secret=jsondata["GOOGLE_CLIENT_SECRET"],
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    # This is only needed if using openId to fetch user info
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'loginPage'
@@ -44,7 +63,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable=False)
     google_id = db.Column(db.String(20), nullable=True)
     email = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=True)
     lastlogin = db.Column(db.String(50), nullable=True)
     is_staff = db.Column(db.Integer, nullable=True)
     blogpost = db.relationship(
@@ -273,6 +292,46 @@ def loginPage():
     return render_template('login.html', jsondata=jsondata)
 
 
+@app.route('/authorize/google', methods=['GET', 'POST'])
+def Google_loginPage():
+    google = oauth.create_client('google')  # create the google oauth client
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route('/authorize')
+def authorize():
+    google = oauth.create_client('google')  # create the google oauth client
+    # Access token from google (needed to get user info)
+    token = google.authorize_access_token()
+    # userinfo contains stuff u specificed in the scrope
+    resp = google.get('userinfo')
+    user_info = resp.json()
+    user = oauth.google.userinfo()  # uses openid endpoint to fetch user info
+    # Here you use the profile/user data that you got and query your database find/register the user
+    # and set ur own data in the session not the profile from google
+    session['profile'] = user_info
+    # make the session permanant so it keeps existing after broweser gets closed
+    session.permanent = True
+    google_id = session['profile']['id']
+    response = User.query.filter_by(google_id=google_id).first()
+    if(response == None):
+        entry = User(name=session['profile']['name'], password=None,
+                     lastlogin=time, email=session['profile']['email'], is_staff=0, google_id=session['profile']['id'])
+        db.session.add(entry)
+        db.session.commit()
+        response = User.query.filter_by(google_id=google_id).first()
+        login_user(response)
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+    else:
+        response.lastlogin = time
+        db.session.commit()
+        login_user(response)
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
@@ -299,6 +358,8 @@ def uploader():
 @login_required
 def logout():
     logout_user()
+    for key in list(session.keys()):
+        session.pop(key)
     flash('Logged out successfully!', 'success')
     return redirect(url_for('loginPage'))
 
