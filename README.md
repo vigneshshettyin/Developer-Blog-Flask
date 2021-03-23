@@ -56,10 +56,8 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 ## For the Future 
 If you can help us with these. Please don't hesitate to open a [Pull Request](https://github.com/vigneshshettyin/Developer-Blog-Flask/pulls).
 
-## Project Maintainer 🚧
+## Cool Developers🚧
 
-<table>
-  <tr>
-    <td align="center"><a href="http://vigneshshetty.in"><img src="https://avatars.githubusercontent.com/u/77713888?s=460&u=28a461a4ae6826d8daa5074823b7753a0385e2fa&v=4" width="100px;" alt=""/><br /><sub><b>Vignesh Shetty</b></sub></a></td>
-  </tr>
-</table>
+<a href="https://github.com/vigneshshettyin/Developer-Blog-Flask/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=vigneshshettyin/Developer-Blog-Flask" />
+</a>
