@@ -315,7 +315,8 @@ def authorize():
     session.permanent = True
     google_id = session['profile']['id']
     response = User.query.filter_by(google_id=google_id).first()
-    if(response == None):
+    if(response == None and (User.query.filter_by(email=session['profile']['email']).first()==None)):
+        print("Ses-3")
         entry = User(name=session['profile']['name'], password=None,
                      lastlogin=time, email=session['profile']['email'], is_staff=0, google_id=session['profile']['id'])
         db.session.add(entry)
@@ -324,7 +325,17 @@ def authorize():
         login_user(response)
         next_page = request.args.get('next')
         return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+    elif(User.query.filter_by(email=session['profile']['email']).first()!=None):
+        print("Ses-1")
+        response = User.query.filter_by(email=session['profile']['email']).first()
+        response.google_id=session['profile']['id']
+        response.lastlogin = time
+        db.session.commit()
+        login_user(response)
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('dashboard'))
     else:
+        print("Ses-2")
         response.lastlogin = time
         db.session.commit()
         login_user(response)
