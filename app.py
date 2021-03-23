@@ -42,7 +42,7 @@ class Contact(db.Model):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
+    google_id = db.Column(db.String(20), nullable=True)
     email = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     lastlogin = db.Column(db.String(50), nullable=True)
@@ -136,9 +136,8 @@ def RegisterPage():
     if (request.method == 'POST'):
         name = request.form.get('name')
         email = request.form.get('email')
-        phone = request.form.get('phone')
         password = sha256_crypt.hash(request.form.get('password'))
-        entry = User(name=name, phone=phone, password=password,
+        entry = User(name=name, password=password,
                      lastlogin=time, email=email, is_staff=0)
         db.session.add(entry)
         db.session.commit()
