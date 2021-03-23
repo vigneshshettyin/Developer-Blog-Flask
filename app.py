@@ -23,7 +23,7 @@ login_manager.login_message_category = 'warning'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Adminlogin.query.get(user_id)
+    return User.query.get(user_id)
 
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,18 +33,19 @@ class Contact(db.Model):
     message = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
-class Adminlogin(db.Model, UserMixin):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     lastlogin = db.Column(db.String(50), nullable=True)
+    is_staff = db.Column(db.Integer, nullable=True)
     blogpost = db.relationship('Blogposts', cascade="all,delete", backref='blogpost')
 
 class Blogposts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('adminlogin.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     slug = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(80), nullable=False)
     timeread = db.Column(db.String(20), nullable=False)
@@ -89,7 +90,8 @@ def newsletter():
         email = request.form.get('email')
         response = Newsletter.query.filter_by(email=email).first()
         if(response==None):
-            ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+            # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+            ip_address = "43.247.157.20"
             url = requests.get("http://ip-api.com/json/{}".format(ip_address))
             j = url.json()
             city = j["city"]
@@ -105,8 +107,8 @@ def newsletter():
 @app.route('/adminlogindetails', methods = ['GET', 'POST'])
 @login_required
 def AdminLoginDetails():
-    if (current_user.email == jsondata["adminemail"]):
-        response = Adminlogin.query.order_by(Adminlogin.id).all()
+    if (current_user.is_staff==1):
+        response = User.query.order_by(User.id).all()
         return render_template('adminlogindetails.html', response=response, jsondata=jsondata)
     else:
         flash("No vaild permissions!", "danger")
@@ -119,7 +121,7 @@ def RegisterPage():
         email = request.form.get('email')
         phone = request.form.get('phone')
         password = sha256_crypt.hash(request.form.get('password'))
-        entry = Adminlogin(name=name, phone=phone, password=password, lastlogin=time, email=email)
+        entry = User(name=name, phone=phone, password=password, lastlogin=time, email=email, is_staff=1)
         db.session.add(entry)
         db.session.commit()
         flash("User Added Successfully, Now Login", "success")
@@ -129,8 +131,8 @@ def RegisterPage():
 @app.route("/deleteAdminUser/<string:id>", methods = ['GET', 'POST'])
 @login_required
 def deleteAdminUser(id):
-        deleteAdminUser = Adminlogin.query.filter_by(id=id).first()
-        if(deleteAdminUser.email==jsondata["adminemail"]):
+        deleteAdminUser = User.query.filter_by(id=id).first()
+        if(current_user.is_staff==1):
             flash("Administrator account can't be deleted!", "danger")
         else:
             db.session.delete(deleteAdminUser)
@@ -141,7 +143,7 @@ def deleteAdminUser(id):
 @app.route('/contactresp', methods = ['GET', 'POST'])
 @login_required
 def contactResp():
-    if (current_user.email == jsondata["adminemail"]):
+    if (current_user.is_staff==1):
         response = Contact.query.order_by(Contact.id).all()
         return render_template('contactresp.html', response=response, jsondata=jsondata)
     else:
@@ -160,7 +162,7 @@ def deleteContact(id):
 @app.route('/newsletterresp', methods = ['GET', 'POST'])
 @login_required
 def newsletterResp():
-        if(current_user.email==jsondata["adminemail"]):
+        if(current_user.is_staff==1):
             response = Newsletter.query.order_by(Newsletter.id).all()
             return render_template('newsletterresp.html', response=response, jsondata=jsondata)
         else:
@@ -230,9 +232,9 @@ def loginPage():
         email = request.form.get('email')
         password = request.form.get('password')
         remember = request.form.get('remember')
-        response = Adminlogin.query.filter_by(email=email).first()
+        response = User.query.filter_by(email=email).first()
         if((response != None) and ( response.email == email ) and ( sha256_crypt.verify(password, response.password )==1)):
-            updateloginTime = Adminlogin.query.filter_by(email=email).first()
+            updateloginTime = User.query.filter_by(email=email).first()
             updateloginTime.lastlogin = time
             db.session.commit()
             login_user(response, remember=remember)
@@ -246,7 +248,7 @@ def loginPage():
 @app.route('/dashboard', methods = ['GET', 'POST'])
 @login_required
 def dashboard():
-    if (current_user.email == jsondata["adminemail"]):
+    if (current_user.is_staff==1):
         response = Blogposts.query.order_by(Blogposts.id).all()
         return render_template('dashboard.html', jsondata=jsondata, response=response)
     else:
