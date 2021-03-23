@@ -31,11 +31,20 @@ $ git clone https://github.com/vigneshshettyin/Developer-Blog-Flask.git
 # Go into the repository
 $ cd Developer-Blog-Flask
 
+# Setup virtual env
+$ py -m venv env
+$ .\env\Scripts\activate
+
 # Install all required modules
 $ pip3 install -r requirements.txt
 
-#Start development server & open 127.0.0.1:5000
-$ python app.py
+# Setup SQLite
+$ py
+>> from app import db
+>> db.create_all()
+
+#Start development server
+$ flask run
 ```
 
 ## License 📄
