@@ -56,16 +56,16 @@ class Contact(db.Model):
     email = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(12), nullable=False)
     message = db.Column(db.String(120), nullable=False)
-    date = db.Column(db.String(12), nullable=True)
+    date = db.Column(db.String(100), nullable=True)
 
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    google_id = db.Column(db.String(20), nullable=True)
+    google_id = db.Column(db.String(100), nullable=True)
     email = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(50), nullable=True)
-    lastlogin = db.Column(db.String(50), nullable=True)
+    password = db.Column(db.String(100), nullable=True)
+    lastlogin = db.Column(db.String(100), nullable=True)
     is_staff = db.Column(db.Integer, nullable=True)
     blogpost = db.relationship(
         'Blogposts', cascade="all,delete", backref='blogpost')
@@ -80,7 +80,7 @@ class Blogposts(db.Model):
     title = db.Column(db.String(50), nullable=False)
     content = db.Column(db.String(500), nullable=False)
     frontimg = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(12), nullable=True)
+    date = db.Column(db.String(100), nullable=True)
 
 
 class Newsletter(db.Model):
@@ -89,7 +89,7 @@ class Newsletter(db.Model):
     country = db.Column(db.String(80), nullable=False)
     city = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.String(12), nullable=True)
+    date = db.Column(db.String(100), nullable=True)
 
 
 IST = pytz.timezone('Asia/Kolkata')
