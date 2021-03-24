@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from passlib.hash import sha256_crypt
 from slugify import slugify
 from datetime import datetime
+from decouple import config
 import json
 import requests
 import os
@@ -26,8 +27,8 @@ db = SQLAlchemy(app)
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
-    client_id=jsondata["GOOGLE_CLIENT_ID"],
-    client_secret=jsondata["GOOGLE_CLIENT_SECRET"],
+    client_id=config('GOOGLE_CLIENT_ID'),
+    client_secret=config('GOOGLE_CLIENT_SECRET'),
     access_token_url='https://accounts.google.com/o/oauth2/token',
     access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
