@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 app.secret_key = '&^98779843798qbnkj(*&*&(23-VIGNESH-BLOG-SITE-&^*&^*&^hjbv3773h'
 app.config['UPLOAD_FOLDER'] = jsondata['upload_location']
-app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
 db = SQLAlchemy(app)
 
 
