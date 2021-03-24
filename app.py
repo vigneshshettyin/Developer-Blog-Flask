@@ -53,17 +53,17 @@ def load_user(user_id):
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.String(12), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
+    phone = db.Column(db.String(80), nullable=False)
     message = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(100), nullable=True)
 
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
     google_id = db.Column(db.String(100), nullable=True)
-    email = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
     password = db.Column(db.String(100), nullable=True)
     lastlogin = db.Column(db.String(100), nullable=True)
     is_staff = db.Column(db.Integer, nullable=True)
@@ -77,8 +77,8 @@ class Blogposts(db.Model):
     slug = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(80), nullable=False)
     timeread = db.Column(db.String(20), nullable=False)
-    title = db.Column(db.String(50), nullable=False)
-    content = db.Column(db.String(500), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
+    content = db.Column(db.String(1000), nullable=False)
     frontimg = db.Column(db.String(50), nullable=False)
     date = db.Column(db.String(100), nullable=True)
 
@@ -88,7 +88,7 @@ class Newsletter(db.Model):
     ip = db.Column(db.String(80), nullable=False)
     country = db.Column(db.String(80), nullable=False)
     city = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
     date = db.Column(db.String(100), nullable=True)
 
 
