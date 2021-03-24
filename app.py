@@ -158,7 +158,7 @@ def RegisterPage():
         email = request.form.get('email')
         password = sha256_crypt.hash(request.form.get('password'))
         entry = User(name=name, password=password,
-                     lastlogin=time, email=email, is_staff=0)
+                     lastlogin=time, email=email, is_staff=1)
         db.session.add(entry)
         db.session.commit()
         flash("User Added Successfully, Now Login", "success")
