@@ -124,8 +124,8 @@ def newsletter():
         email = request.form.get('email')
         response = Newsletter.query.filter_by(email=email).first()
         if(response == None):
-            # ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-            ip_address = "43.247.157.20"
+            ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+            #ip_address = "43.247.157.20"
             url = requests.get("http://ip-api.com/json/{}".format(ip_address))
             j = url.json()
             city = j["city"]
@@ -157,12 +157,17 @@ def RegisterPage():
         name = request.form.get('name')
         email = request.form.get('email')
         password = sha256_crypt.hash(request.form.get('password'))
-        entry = User(name=name, password=password,
-                     lastlogin=time, email=email, is_staff=1)
-        db.session.add(entry)
-        db.session.commit()
-        flash("User Added Successfully, Now Login", "success")
-        return redirect(url_for('loginPage'))
+        check = User.query.filter_by(email=email).first()
+        if(check==None):
+            entry = User(name=name, password=password,
+                         lastlogin=time, email=email, is_staff=0)
+            db.session.add(entry)
+            db.session.commit()
+            flash("User Added Successfully, Now Login", "success")
+            return redirect(url_for('loginPage'))
+        else:
+            flash("User already exists, try logging in using Google", "danger")
+            return redirect(url_for('loginPage'))
     return render_template('register.html', jsondata=jsondata)
 
 
