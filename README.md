@@ -18,7 +18,7 @@ If you created something awesome and want to contribute then feel free to open P
 
 ## Getting Started 🚀
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://vignesh-blog.herokuapp.com/)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://blog.vigneshin.ml/)
 
 Note: Database will reset in 10 mins
 
