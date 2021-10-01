@@ -20,4 +20,4 @@ Werkzeug==2.0.1
 Authlib==0.15.4
 gunicorn==19.9.0
 psycopg2==2.9.1
-python-decouple==3.4
+python-decouple==3.5
